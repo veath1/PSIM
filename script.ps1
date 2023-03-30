@@ -1,4 +1,4 @@
-$uriSlack = "https://hooks.slack.com/services/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"
+$uriSlack = $args[0]
 
 $roaming=$env:APPDATA
 $local=$env:LOCALAPPDATA
